@@ -1,0 +1,88 @@
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>helloworld-deploy</artifactId>
+	<name>DEPLOY hello world WAR</name>
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>org.devopscon.maven.demo</groupId>
+		<artifactId>helloworld-reactor</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<properties>
+		<!--Edit this prop -->
+		<tomcatLocation>/Users/nirk/Desktop/tomcat8</tomcatLocation>
+	</properties>
+	<!-- 
+	Here you can configure the desired deployment technology like: chef, Puppet, Ansible... for traditional projects and Docker / Kubernetes for containerized technologies 
+	This is a dummy example to deploy war file to your local Tomcat server
+	-->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>stop</id>
+						<phase>install</phase>
+						<configuration>
+							<target name="Stop Tomcat">
+								<echo message="Stopping Tomcat server"/>
+								<exec executable="/bin/bash">
+									<arg value="${tomcatLocation}/bin/shutdown.sh"/>
+								</exec>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>deploy</id>
+						<phase>install</phase>
+						<configuration>
+							<target name="Deploy to Tomcat">
+								<echo message="Deploy to Tomcat (copy WAR file)"/>
+								<copy file="../build-war/target/helloworld.war" todir="${tomcatLocation}/webapps"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>start</id>
+						<phase>install</phase>
+						<configuration>
+							<target name="Start Tomcat">
+								<echo message="Starting Tomcat server"/>
+								<exec executable="/bin/bash">
+									<arg value="${tomcatLocation}/bin/startup.sh"/>
+								</exec>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>sleep</id>
+						<phase>install</phase>
+						<configuration>
+							<target name="Wait">
+								<echo message="Wait for Tomcat server to start gracefully"/>
+								<sleep seconds="10"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
