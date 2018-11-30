@@ -12,7 +12,7 @@
 	</parent>
 	<properties>
 		<!--Edit this prop -->
-		<tomcatLocation>/Users/nirk/Desktop/tomcat8</tomcatLocation>
+		<tomcatLocation>${TOMCAT_LOCATION}</tomcatLocation>
 	</properties>
 	<!-- 
 	Here you can configure the desired deployment technology like: chef, Puppet, Ansible... for traditional projects and Docker / Kubernetes for containerized technologies 
