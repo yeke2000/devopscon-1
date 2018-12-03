@@ -11,7 +11,8 @@
 	</properties>
 	<modules>
 		<module>build-war</module>
-		<module>deploy-war</module>
+        <!-- Make sure you have Jenkins PARAM first -->
+        <module>deploy-war</module>
 		<module>tests-war</module>
 	</modules>
 	<build>
